@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Job Posting and Employment Trends</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+     integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+     crossorigin=""/>
+    <link rel="stylesheet" href="style.css">
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+    integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+    crossorigin=""></script>
+  </head>
+  <body>
+    <header>
+      <img id = "imageSize" src="https://www.aihr.com/wp-content/uploads/First-in-first-hired.png" alt="Logo">
+      <h1>HIRED</h1>
+      <p>Explore data related to job postings and employment trends for new UMD grads in the Washignton DC and CP area</p>
+    </header>
+    <nav>
+        <!--This will link to the user's account information-->
+        <ul>
+          <li><a href="savedJobs.html">My Saved Jobs</a></li>
+          <li><a href="about.html">About Hired</a></li>
+        </ul>
+      </nav>
+    <main>
+      <h2>Job Openings</h2>
+       <!-- Job titles and descriptions will be added dynamically using the Postman job API -->
+      <form action = "http://api.dataatwork.org/v1/jobs" class="box form">
+        <div>
+            <label for="resto">Filter By Job Name</label>
+            <input type="text" id="resto" name="resto">
+            <label for="experienceRange">Filter by years of experience:</label>
+            <input type="range" id="experienceRange" name="experienceRange" min="0" max="10" value="5">
+        </div>
+        <button type="button" id="generate" >Generate Job List</button>
+      </form>
+      <h2>Job Locations</h2> <!--Map of Job locations using Leaflet -->
+      <div id="map"></div>
+      <h2>Job Posting Sources</h2>
+      <ul>
+        <!-- Job posting sources will be added dynamically using the Postman job API -->
+      </ul>
+      <ul>
+        <!--Employment Trends will be added dynamically using Highcharts.com API -->
+      </ul>
+      <h2>Employment Trends</h2>
+      <div class="box"></div>
+    </main>
+    <footer>
+      <p>Powered by the job API from Postman <Charts class="js"></Charts></p>
+      <p>Github Account Name: jbekenya
+        <a href="https://github.com/jbekenya">Github link</a>
+      </p>
+    </footer>
+  </body>
+</html>
