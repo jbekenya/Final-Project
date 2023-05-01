@@ -2,7 +2,9 @@ async function mainEvent() {
     const form = document.querySelector('.main_form'); 
     const loadJobData = document.querySelector("#load_job_data");
     const generateListButton = document.querySelector('#generate');
-    const textField = document.querySelector('#resto');
+    const resetList = document.querySelector("#reset_data");
+    const textField = document.querySelector('#job');
+    const companyTextField = document.querySelector("#company");
     
 
     const mapList = initMap();
@@ -38,7 +40,44 @@ async function mainEvent() {
         markerPlace(jobList, mapList);
 
       })
+    textField.addEventListener('input', (event)=>{
+        console.log('input', event.target.value);
+        const newList = filterList(jobList, event.target.value)
+        console.log(newList);
+        injectHTML(newList);
+        markerPlace(newList, mapList);
+
+    })
+
+    companyTextField.addEventListener('input', (event)=>{
+        console.log('input', event.target.value);
+        const newList = filterList(jobList, event.target.value)
+        console.log(newList);
+        injectHTML(newList);
+        markerPlace(newList, mapList);
+
+    })
+
+    resetList.addEventListener("click", (event) => {
+        console.log('clear browser data');
+        localStorage.clear();
+        console.log('localStorage check', localStorage.getItem("storedData"));
+    })
   
+}
+function filterList(list, query) {
+    return list.filter((item) => {
+        if (item.Title){
+            const lowerCaseName = (item.Title || "").toLowerCase();
+            const lowerCaseQuery = (query || "").toLowerCase();
+            return lowerCaseName.includes(lowerCaseQuery);
+        } else if (item.company){
+            const lowerCaseName = (item.company || "").toLowerCase();
+            const lowerCaseQuery = (query || "").toLowerCase();
+            return lowerCaseName.includes(lowerCaseQuery);
+        }
+      
+    })
 }
 function getRandomInt(min, max) {
     min = Math.ceil(min);

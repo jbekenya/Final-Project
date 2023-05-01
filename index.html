@@ -8,11 +8,12 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
      integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
      crossorigin=""/>
-    <link rel="stylesheet" href="style.css">
-    <!-- Make sure you put this AFTER Leaflet's CSS -->
+     <!-- Make sure you put this AFTER Leaflet's CSS -->
     <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
     integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
     crossorigin=""></script>
+    <link rel="stylesheet" href="style.css">
+    
   </head>
   <body>
     <header>
@@ -31,13 +32,15 @@
        <!-- Job openings will be added dynamically using the Postman job API -->
       <form class="box main_form">
         <div>
-            <label for="resto">Filter By Job Name</label>
-            <input type="text" id="resto" name="resto">
-            <label for="experienceRange">Filter by years of experience:</label>
-            <input type="range" id="experienceRange" name="experienceRange" min="0" max="10" value="5">
+         <!--<label for="job">Filter By Job Name</label>-->
+         <!----> <input type="text" id="job" name="job">-->
+          <label for="company">Filter By Company Name:</label>
+          <input type="text" id="company" name="company">
+            <!--<input type="range" id="experienceRange" name="experienceRange" min="0" max="10" value="5">-->
         </div>
         <button type="button" id="load_job_data">Load Job Data</button>
         <button type="button" id="generate" >Generate Job List</button>
+        <button type="button" id="reset_data">Reset Job Data</button>
       </form>
       <div class="box">
         <div id="map"></div>
