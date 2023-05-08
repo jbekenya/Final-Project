@@ -1,105 +1,96 @@
-async function mainEvent() { 
-    const form = document.querySelector('.main_form'); 
+async function mainEvent() {
+    const form = document.querySelector(".main_form");
     const loadJobData = document.querySelector("#load_job_data");
-    const generateListButton = document.querySelector('#generate');
+    const generateListButton = document.querySelector("#generate");
     const resetList = document.querySelector("#reset_data");
-    const textField = document.querySelector('#job');
+    const textField = document.querySelector("#company");
     const companyTextField = document.querySelector("#company");
-    
-
+    const storedList = localStorage.getItem("storedList"); //local storage for the list of jobs
+  
     const mapList = initMap();
-
-    const storedData = localStorage.getItem('storedData');
-    let parsedData = JSON.parse(storedData);
-    if (parsedData?.length > 0){
-        generateListButton.classList.remove('hidden');
-    }
-
+    let parsedData = JSON.parse(storedList);
     let jobList = [];
   
-    loadJobData.addEventListener('click', async (submitEvent) => {
-
-      const results = await fetch('https://901522ec-fa4d-4b63-aecc-a237dc24ac90.mock.pstmn.io/jobs/');
+    loadJobData.addEventListener("click", async (submitEvent) => {
+      const results = await fetch(
+        "https://901522ec-fa4d-4b63-aecc-a237dc24ac90.mock.pstmn.io/jobs/"
+      );
       let resultsBody = await results.text();
-      resultsBody = resultsBody.replace(/[\u0000-\u001F]/g, '');
-      parsedData =  JSON.parse(resultsBody);
+      resultsBody = resultsBody.replace(/[\u0000-\u001F]/g, "");
+      localStorage.setItem("storedList", JSON.stringify(resultsBody));
+      parsedData = JSON.parse(resultsBody);
       console.log(parsedData);
-
-      if (parsedData?.length > 0){
-        generateListButton.classList.remove('hidden');
+  
+      if (parsedData?.length > 0) {
+        generateListButton.classList.remove("hidden");
       }
-
+  
       drawChart(parsedData);
-      
     });
   
-    generateListButton.addEventListener('click', (event) => {
-        jobList = cutList(parsedData);
-        console.log('generate new list', jobList);
-        injectHTML(jobList);
-        markerPlace(jobList, mapList);
-
-      })
-    textField.addEventListener('input', (event)=>{
-        console.log('input', event.target.value);
-        const newList = filterList(jobList, event.target.value)
-        console.log(newList);
-        injectHTML(newList);
-        markerPlace(newList, mapList);
-
-    })
-
-    companyTextField.addEventListener('input', (event)=>{
-        console.log('input', event.target.value);
-        const newList = filterList(jobList, event.target.value)
-        console.log(newList);
-        injectHTML(newList);
-        markerPlace(newList, mapList);
-
-    })
-
-    resetList.addEventListener("click", (event) => {
-        console.log('clear browser data');
-        localStorage.clear();
-        console.log('localStorage check', localStorage.getItem("storedData"));
-    })
+    generateListButton.addEventListener("click", (event) => {
+      jobList = cutList(parsedData);
+      // saveToLocalStorage(jobList);
+      console.log("generate new list", jobList);
+      injectHTML(jobList);
+      markerPlace(jobList, mapList);
+    });
   
-}
-function filterList(list, query) {
+    companyTextField.addEventListener("input", (event) => {
+      console.log("input", event.target.value);
+      const filteredList = filterList(
+        parsedData,
+        event.target.value.trim().toLowerCase()
+      );
+      console.log(filteredList);
+      injectHTML(filteredList);
+      markerPlace(filteredList, mapList);
+    });
+  
+    // a function that that will swap out the localStorage for something new.
+    resetList.addEventListener("click", (event) => {
+      console.log("clear browser data");
+      localStorage.clear();
+      location.reload();
+      console.log("localStorage check", localStorage.getItem("storedList"));
+    });
+  }
+  
+  function filterList(list, query) {
     return list.filter((item) => {
-        if (item.Title){
-            const lowerCaseName = (item.Title || "").toLowerCase();
-            const lowerCaseQuery = (query || "").toLowerCase();
-            return lowerCaseName.includes(lowerCaseQuery);
-        } else if (item.company){
-            const lowerCaseName = (item.company || "").toLowerCase();
-            const lowerCaseQuery = (query || "").toLowerCase();
-            return lowerCaseName.includes(lowerCaseQuery);
-        }
-      
-    })
-}
-function getRandomInt(min, max) {
+      const lowerCaseQuery = (query || "").toLowerCase();
+      if (item.Title && item.Title.toLowerCase().includes(lowerCaseQuery)) {
+        return true;
+      }
+      if (item.company && item.company.toLowerCase().includes(lowerCaseQuery)) {
+        return true;
+      }
+      return false;
+    });
+  }
+  
+  
+  function getRandomInt(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min) + min); // The maximum is exclusive and the minimum is inclusive
   }
-
-function injectHTML(list) {
-    console.log('fired injectHTML');
-    const target = document.querySelector("#jobs_list")
-    let companyName = '';
-    let companyUrl = '';
-    target.innerHTML = '';
+  
+  function injectHTML(list) {
+    console.log("fired injectHTML");
+    const target = document.querySelector("#jobs_list");
+    let companyName = "";
+    let companyUrl = "";
+    target.innerHTML = "";
     list.forEach((item, index) => {
-        if (item.company){
-            companyName = item.company;
-        }
-        if (item.URL){
-            companyUrl = item.URL;
-        }
-        if (item.Title && companyName != ''){
-            const str = `<li><a href="${companyUrl}">${item.Title}</a>, at ${companyName}</li>`
+      if (item.company) {
+        companyName = item.company;
+      }
+      if (item.URL) {
+        companyUrl = item.URL;
+      }
+      if (item.Title && companyName != "") {
+        const str = `<li><a href="${companyUrl}">${item.Title}</a>, at ${companyName}</li>`
             target.innerHTML += str
         }
     })
