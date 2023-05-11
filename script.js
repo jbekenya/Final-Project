@@ -25,7 +25,8 @@ async function mainEvent() {
         generateListButton.classList.remove("hidden");
       }
   
-      drawChart(parsedData);
+      skills = skillsOnDemand(parsedData);
+      drawChart(skills);
     });
   
     generateListButton.addEventListener("click", (event) => {
@@ -96,6 +97,33 @@ async function mainEvent() {
     })
 
 }
+// creates a dictionary with the skills on demand
+
+function skillsOnDemand(list){
+  let jobDescription = [];
+  // skills to look for: lead, product, teams 
+  let keywordCounts = {
+    "Lead": 0,
+    "Product": 0,
+    "Teams": 0
+  };
+  list.forEach((item, index) => {
+      if (item.Description) {
+        jobDescription.push(item.Description);
+      }
+});
+for (var i = 0; i < jobDescription.length; i++) {
+  var description = jobDescription[i];
+
+  // Count the number of times each keyword appears in the description
+  keywordCounts.Lead += (description.match(/lead/gi) || []).length;
+  keywordCounts.Product += (description.match(/product/gi) || []).length;
+  keywordCounts.Teams += (description.match(/teams/gi) || []).length;
+  //keywordCounts.Engineer += (description.match(/engineer/gi)|| []).length;
+}
+  
+  return keywordCounts
+}
 
   
 function  cutList(list){
@@ -142,32 +170,23 @@ function markerPlace(array, map){
 
   }
 
-
-  function drawChart(list){
-    let companyNames = [];
-    list.forEach((item, index) => {
-        if (item.company){
-            companyNames.push(item.company);
-        }
-    })
-
-    console.log(companyNames);
-    let dataPoints = companyNames.map(companyName => ({ label: companyName, y: 2 }));
-
+  function drawChart(dict) {
+    // Convert the dictionary into an array of data points
+    let dataPoints = Object.entries(dict).map(([key, value]) => ({ label: key, y: value }));
+  
     let chart = new CanvasJS.Chart("chartContainer", {
-        theme: "light1", // "light2", "dark1", "dark2"
-        animationEnabled: false, // change to true		
-        title:{
-            text: "Job openings by company"
-        },
-        data: [
-        {
-            type: "column",
-            dataPoints: dataPoints
-        }
-        ]
+      theme: "light1", // "light2", "dark1", "dark2"
+      animationEnabled: false, // change to true		
+      title: {
+        text: "Skills on Demand Based on Job Descriptions"
+      },
+      data: [{
+        type: "column",
+        dataPoints: dataPoints
+      }]
     });
+  
     chart.render();
-}
+  }
 
 document.addEventListener('DOMContentLoaded', async () => mainEvent());
