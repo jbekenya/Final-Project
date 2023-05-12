@@ -69,6 +69,17 @@ body {
   margin: 0 auto;
   }
 
+  .box2{
+  background-color: rgba(19, 222, 236, 0.4);
+  border: 2px dashed;
+  border-radius: 4px;
+  
+  width: 90%;
+  height:fit-content;
+  padding: 1.5rem;
+  margin: 0 auto;
+  }
+
   #chartContainer{
     height: 270px; 
     width: 100%;

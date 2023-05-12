@@ -105,7 +105,8 @@ function skillsOnDemand(list){
   let keywordCounts = {
     "Lead": 0,
     "Product": 0,
-    "Teams": 0
+    "Teams": 0,
+    "Branding": 0
   };
   list.forEach((item, index) => {
       if (item.Description) {
@@ -119,7 +120,7 @@ for (var i = 0; i < jobDescription.length; i++) {
   keywordCounts.Lead += (description.match(/lead/gi) || []).length;
   keywordCounts.Product += (description.match(/product/gi) || []).length;
   keywordCounts.Teams += (description.match(/teams/gi) || []).length;
-  //keywordCounts.Engineer += (description.match(/engineer/gi)|| []).length;
+  keywordCounts.Branding += (description.match(/brand/gi)|| []).length;
 }
   
   return keywordCounts
