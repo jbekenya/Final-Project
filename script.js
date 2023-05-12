@@ -3,7 +3,7 @@ async function mainEvent() {
     const loadJobData = document.querySelector("#load_job_data");
     const generateListButton = document.querySelector("#generate");
     const resetList = document.querySelector("#reset_data");
-    const textField = document.querySelector("#company");
+    //const textField = document.querySelector("#company");
     const companyTextField = document.querySelector("#company");
     const storedList = localStorage.getItem("storedList"); //local storage for the list of jobs
   
@@ -51,9 +51,8 @@ async function mainEvent() {
     // a function that that will swap out the localStorage for something new.
     resetList.addEventListener("click", (event) => {
       console.log("clear browser data");
-      localStorage.clear();
-      location.reload();
-      console.log("localStorage check", localStorage.getItem("storedList"));
+      localStorage.removeItem("storedList"); // Step 1
+      location.reload(); 
     });
   }
   
@@ -61,10 +60,11 @@ async function mainEvent() {
     return list.filter((item) => {
       const lowerCaseQuery = (query || "").toLowerCase();
       if (item.Title && item.Title.toLowerCase().includes(lowerCaseQuery)) {
-        return true;
+        return item.Title.toLowerCase().includes(lowerCaseQuery);
       }
       if (item.company && item.company.toLowerCase().includes(lowerCaseQuery)) {
-        return true;
+        console.log(item.company.toLowerCase().includes(lowerCaseQuery));
+        return item.company.toLowerCase().includes(lowerCaseQuery);
       }
       return false;
     });
