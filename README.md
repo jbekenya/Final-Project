@@ -5,7 +5,9 @@ HIRED -> Helping new UMD Grads find Jobs in metropolitan areas
 # Target Browsers
 - Destop browser - Chrome 54+
 - Mobile browser - Chrome for Android 67
-
+# Help
+- To use this web application, first, click the "Load job data" button.
+- To see a list of jobs, click "Generate job list" button.
 # Documentation
 # API Used 
 - This application uses the jobs API from Postman. 
